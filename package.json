@@ -1,0 +1,19 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "chat with websocket and redis",
+  "dependencies": {
+    "redis": "^2.4.2",
+    "websocket": "^1.0.22"
+  },
+  "devDependencies": {
+    "live-server": "^0.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node src/app.js",
+    "client": "live-server --open=src/client"
+  },
+  "author": "Andreas",
+  "license": "ISC"
+}
