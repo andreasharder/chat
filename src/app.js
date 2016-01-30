@@ -19,16 +19,21 @@ var clients = [];
 var pub = redis.createClient();
 var sub = redis.createClient();
 
-sub.subscribe('global');
-
 // Listen for messages being published to this server.
 sub.on('message', function(channel, msg) {
     // Broadcast the message to all connected clients on this server.
     clients.forEach(function(client) {
         console.log(msg);
-        client.send(msg);
+        if (channel === getChannel(msg)) {
+            client.send(msg);
+        }
     })
 });
+
+function getChannel (msg) {
+    var message = JSON.parse(msg);
+    return message.action.data[0].channel;
+}
 
 socketServer( 'example', function ( client, server ) {
 
@@ -39,8 +44,13 @@ socketServer( 'example', function ( client, server ) {
 
     client.on('message', function ( msg ) {
         console.log('[message]');
+
+        var channel = getChannel(msg.utf8Data);
+
+        sub.subscribe(channel);
+
         // Publish this message to the Redis pub/sub.
-        pub.publish('global', msg.utf8Data);
+        pub.publish(channel, msg.utf8Data);
     });
 
     client.on('error', function ( err ) {
