@@ -7,10 +7,13 @@
     "websocket": "^1.0.22"
   },
   "devDependencies": {
-    "live-server": "^0.9.1"
+    "chai": "^3.5.0",
+    "live-server": "^0.9.1",
+    "mocha": "^2.4.5"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -u bdd --recursive ./src/tests",
+    "watch": "mocha -w -u bdd --recursive ./src/tests",
     "server": "node src/app.js",
     "client": "live-server --open=src/client"
   },

@@ -1,16 +1,10 @@
 var config        = require('./config.js');
 var socketServer  = require('./server/vws.socket.js').server;
 var redis         = require('redis');
+var getPort       = require('./argParser.js');
 
-process.argv.forEach(function (val, index, array) {
-    if (val.indexOf("port=") > -1) {
-        var portString = val.substring(5);
-        var portNumber = parseInt(portString, 10);
-        if (portNumber == portString) {
-            config.port = portNumber;
-        }
-    }
-});
+
+config.port = getPort(process.argv);
 
 //All connected clients
 var clients = [];
