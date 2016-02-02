@@ -2,7 +2,7 @@ var config        = require('./config.js');
 var socketServer  = require('./server/vws.socket.js').server;
 var redis         = require('redis');
 var getPort       = require('./argParser.js');
-
+var Repo      = require('./repo.js');
 
 config.port = getPort(process.argv);
 
