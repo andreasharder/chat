@@ -53,17 +53,21 @@ socketServer( 'example', function ( client, server ) {
         if (command === "status") {
             sub.subscribe(channel);
 
-            //TODO: send all stored messeges for the channel to client
-            repo.getAllByCannel(channel, function(err, object) {
-    			console.log(object);
+            //lasr 10 messeges for the channel to client
+            repo.getAllByCannel(channel, function(err, messages){
+                messages.reverse();
+                for (var i = 0; i < messages.length; i++) {
+                    console.log(messages[i]);
+                    client.send(messages[i]);
+                }
     		})
         }
         if (command === "msg") {
             // Publish this message to the Redis pub/sub.
             pub.publish(channel, msg.utf8Data);
 
-            //TODO: save into store
-            //repo.add(channel, msg.utf8Data);
+            //save into store
+            repo.add(channel, msg.utf8Data);
         }
     });
 
