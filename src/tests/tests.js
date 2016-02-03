@@ -21,16 +21,12 @@ describe('argParser', function(){
 
 describe('Repo', function() {
 
-    function clientMock() {
-        this.hset = function (message, channel) {
-        };
-    }
-
+    var clientMock = { lpush: function () {} };
+    var spy = chai.spy(clientMock.lpush);
     var repo = new Repo(clientMock);
-    //var spy = chai.spy(clientMock.hset);
 
     it('should add new message', function() {
-        repo.add(1);
-        //expect(spy).to.have.been.called();
+        repo.add("list", "message");
+        expect(spy).to.have.been.called;
     });
 });
