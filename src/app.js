@@ -2,12 +2,12 @@ var config        = require('./config.js');
 var socketServer  = require('./server/vws.socket.js').server;
 var redis         = require('redis');
 var getPort       = require('./argParser.js');
-var Repo       = require('./repo.js').Repo;
+var Repo          = require('./repo.js').Repo;
 
 config.port = getPort(process.argv);
 
-var redisStore = redis.createClient();
-var repo = new Repo(redisStore);
+//Redis store
+var repo = new Repo(redis.createClient());
 
 //All connected clients
 var clients = [];
