@@ -28,6 +28,11 @@ function getChannel (msg) {
     return message.action.data[0].channel;
 }
 
+function getCommand (msg) {
+    var message = JSON.parse(msg);
+    return message.action.command;
+}
+
 socketServer( 'example', function ( client, server ) {
 
     client.on('open', function ( id ) {
@@ -39,11 +44,15 @@ socketServer( 'example', function ( client, server ) {
         console.log('[message]');
 
         var channel = getChannel(msg.utf8Data);
+        var command = getCommand(msg.utf8Data);
 
-        sub.subscribe(channel);
-
-        // Publish this message to the Redis pub/sub.
-        pub.publish(channel, msg.utf8Data);
+        if (command === "status") {
+            sub.subscribe(channel);
+        }
+        if (command === "msg") {
+            // Publish this message to the Redis pub/sub.
+            pub.publish(channel, msg.utf8Data);
+        }
     });
 
     client.on('error', function ( err ) {

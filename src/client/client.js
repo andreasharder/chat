@@ -42,8 +42,18 @@ function init() {
 
 function joinChannel() {
 	var channel = jQuery('#channel').val();
-	jQuery('#messages').empty();codeTest.channel = channel;
-	drawMessage({ author:'system', channel: codeTest.channel, text: 'welcome to a new channel (' + channel + '), ' + codeTest.nickName, timestamp: new Date().toLocaleTimeString() });
+	jQuery('#messages').empty();
+	codeTest.channel = channel;
+
+	var data = {
+		author: 'system',
+		channel: codeTest.channel,
+		text: 'welcome to a new channel (' + channel + '), ',
+		timestamp: new Date().toLocaleTimeString()
+	};
+	drawMessage(data);
+	send2server('status', data);
+
 	return codeTest.channel;
 };
 
@@ -63,7 +73,6 @@ function sendMsg(text) {
 		text: text,
 		timestamp: new Date().toLocaleTimeString()
 	};
-	// ({ author:'YOU', channel: data.channel, text: data.text, timestamp: new Date().toLocaleTimeString() });
 	return send2server('msg', data);
 };
 
@@ -77,7 +86,7 @@ function send2server(command, data) {
 					author: codeTest.nickName,
 					channel: codeTest.channel,
 					text: data.text,
-					timestamp: data.timestamp 
+					timestamp: data.timestamp
 				}
 			]
 		}
