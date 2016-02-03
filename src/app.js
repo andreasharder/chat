@@ -2,8 +2,12 @@ var config        = require('./config.js');
 var socketServer  = require('./server/vws.socket.js').server;
 var redis         = require('redis');
 var getPort       = require('./argParser.js');
+var Repo       = require('./repo.js').Repo;
 
 config.port = getPort(process.argv);
+
+var redisStore = redis.createClient();
+var repo = new Repo(redisStore);
 
 //All connected clients
 var clients = [];
@@ -14,9 +18,9 @@ var sub = redis.createClient();
 
 // Listen for messages being published to this server.
 sub.on('message', function(channel, msg) {
+    console.log(msg);
     // Broadcast the message to all connected clients on this server.
     clients.forEach(function(client) {
-        console.log(msg);
         if (channel === getChannel(msg)) {
             client.send(msg);
         }
@@ -48,10 +52,18 @@ socketServer( 'example', function ( client, server ) {
 
         if (command === "status") {
             sub.subscribe(channel);
+
+            //TODO: send all stored messeges for the channel to client
+            repo.getAllByCannel(channel, function(err, object) {
+    			console.log(object);
+    		})
         }
         if (command === "msg") {
             // Publish this message to the Redis pub/sub.
             pub.publish(channel, msg.utf8Data);
+
+            //TODO: save into store
+            //repo.add(channel, msg.utf8Data);
         }
     });
 

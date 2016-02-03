@@ -4,14 +4,12 @@ var Repo = (function() {
 		this.client = client;
 	}
 
-	Repo.prototype.add = function (message, channel) {
-		this.client.hmset(channel, message);
+	Repo.prototype.add = function (channel, message) {
+		this.client.lpush(channel, message);
 	};
 
-	Repo.prototype.getAllByCannel = function (channel) {
-		this.client.hgetall(channel, function(err, object) {
-			console.log(object);
-		});
+	Repo.prototype.getAllByCannel = function (channel, callback) {
+		this.client.lrange(channel, 0, 10, callback);
 	};
 
 	return Repo;
