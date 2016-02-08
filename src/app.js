@@ -53,8 +53,8 @@ socketServer( 'example', function ( client, server ) {
     if (command === "status") {
       sub.subscribe(channel);
 
-      //lasr 10 messeges for the channel to client
-      repo.getAllByCannel(channel, function(err, messages){
+      //send messeges from the channel to client
+      repo.getByChannel(channel, function(err, messages){
         messages.reverse();
         for (var i = 0; i < messages.length; i++) {
           console.log(messages[i]);
